@@ -60,84 +60,84 @@ extension UIColor {
 
   /// Returns an optional tuple with the named HSBA components
   public func getHsba() -> (hue:Double, saturation:Double, brightness:Double, alpha:Double)? {
-    let hue = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let brightness = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let saturation = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let alpha = UnsafeMutablePointer<CGFloat>.alloc(1)
+    let hue = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let brightness = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let saturation = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let alpha = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
     
-    hue.initialize(0.0)
-    brightness.initialize(0.0)
-    saturation.initialize(0.0)
-    alpha.initialize(0.0)
+    hue.initialize(to: 0.0)
+    brightness.initialize(to: 0.0)
+    saturation.initialize(to: 0.0)
+    alpha.initialize(to: 0.0)
     
     var values: (hue:Double, saturation:Double, brightness:Double, alpha:Double)?
     if self.getHue(hue, saturation: saturation, brightness: brightness, alpha: alpha) == true {
-      values = (hue: Double(hue.memory), saturation: Double(saturation.memory), brightness: Double(brightness.memory), alpha: Double(alpha.memory))
+      values = (hue: Double(hue.pointee), saturation: Double(saturation.pointee), brightness: Double(brightness.pointee), alpha: Double(alpha.pointee))
     } else {
       values = nil
     }
-    hue.destroy(1)
-    hue.dealloc(1)
-    brightness.destroy(1)
-    brightness.dealloc(1)
-    saturation.destroy(1)
-    saturation.dealloc(1)
-    alpha.destroy(1)
-    alpha.dealloc(1)
+    hue.deinitialize(count: 1)
+    hue.deallocate(capacity: 1)
+    brightness.deinitialize(count: 1)
+    brightness.deallocate(capacity: 1)
+    saturation.deinitialize(count: 1)
+    saturation.deallocate(capacity: 1)
+    alpha.deinitialize(count: 1)
+    alpha.deallocate(capacity: 1)
     
     return values
   }
 
   /// Returns an optional tuple with the named RGBA components
   public func getRgba() -> (red:Double, green:Double, blue:Double, alpha:Double)? {
-    let red = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let blue = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let green = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let alpha = UnsafeMutablePointer<CGFloat>.alloc(1)
+    let red = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let blue = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let green = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let alpha = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
     
-    red.initialize(0.0)
-    blue.initialize(0.0)
-    green.initialize(0.0)
-    alpha.initialize(0.0)
+    red.initialize(to: 0.0)
+    blue.initialize(to: 0.0)
+    green.initialize(to: 0.0)
+    alpha.initialize(to: 0.0)
     
     var values: (red:Double, blue:Double, green:Double, alpha:Double)?
     if self.getRed(red, green: green, blue: blue, alpha: alpha) == true {
-      values = (red: Double(red.memory), green: Double(green.memory), blue: Double(blue.memory), alpha: Double(alpha.memory))
+      values = (red: Double(red.pointee), green: Double(green.pointee), blue: Double(blue.pointee), alpha: Double(alpha.pointee))
     } else {
       values = nil
     }
     
-    red.destroy(1)
-    red.dealloc(1)
-    blue.destroy(1)
-    blue.dealloc(1)
-    green.destroy(1)
-    green.dealloc(1)
-    alpha.destroy(1)
-    alpha.dealloc(1)
+    red.deinitialize(count: 1)
+    red.deallocate(capacity: 1)
+    blue.deinitialize(count: 1)
+    blue.deallocate(capacity: 1)
+    green.deinitialize(count: 1)
+    green.deallocate(capacity: 1)
+    alpha.deinitialize(count: 1)
+    alpha.deallocate(capacity: 1)
     
     return values
   }
   
   /// Returns an optional tuple with the named greyscale components
   public func getGreyscale() -> (white:Double, alpha:Double)? {
-    let white = UnsafeMutablePointer<CGFloat>.alloc(1)
-    let alpha = UnsafeMutablePointer<CGFloat>.alloc(1)
+    let white = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
+    let alpha = UnsafeMutablePointer<CGFloat>.allocate(capacity: 1)
     
-    white.initialize(0.0)
-    alpha.initialize(0.0)
+    white.initialize(to: 0.0)
+    alpha.initialize(to: 0.0)
     
     var values: (white:Double, alpha:Double)?
     if self.getWhite(white, alpha: alpha) == true {
-      values = (white: Double(white.memory), alpha: Double(alpha.memory))
+      values = (white: Double(white.pointee), alpha: Double(alpha.pointee))
     } else {
       values = nil
     }
     
-    white.destroy(1)
-    white.dealloc(1)
-    alpha.destroy(1)
-    alpha.dealloc(1)
+    white.deinitialize(count: 1)
+    white.deallocate(capacity: 1)
+    alpha.deinitialize(count: 1)
+    alpha.deallocate(capacity: 1)
     
     return values
   }
@@ -169,12 +169,12 @@ extension UIColor {
   
   /// The opposite of lighten
   public func darken(amount:Double) -> UIColor? {
-    return self.lighten((amount * -1))
+    return self.lighten(amount: (amount * -1))
   }
 
   /// The opposite of scaleLighten 
   public func scaleDarken(amount:Double) -> UIColor? {
-    return self.scaleLighten((amount * -1))
+    return self.scaleLighten(amount: (amount * -1))
   }
   
   /** Takes a double between 0.0 and 1.0, and adds the corresponding amount of
@@ -192,7 +192,7 @@ extension UIColor {
   
   /// The opposite of tint, this adds black to a color
   public func shade(amount:Double) -> UIColor? {
-    return self.tint((amount * -1))
+    return self.tint(amount: (amount * -1))
   }
   
   /// Takes a double between 0.0 and 1.0 and raises the saturation accordingly
@@ -209,6 +209,6 @@ extension UIColor {
  
   /// The opposite of saturate  
   public func desaturate(amount:Double) -> UIColor? {
-    return self.saturate((amount * -1))
+    return self.saturate(amount: (amount * -1))
   }
 }
